@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 360px;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    font-size: 13px;
+    color: #1a1a1a;
+    background: #fff;
+    overflow-x: hidden;
+  }
+
+  /* ── Steps ── */
+  .step { display: none; }
+  .step.active { display: block; }
+
+  /* ── Header ── */
+  .header {
+    padding: 28px 24px 20px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .header h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+  .header p { font-size: 12px; color: #999; margin-top: 4px; }
+
+  /* ── Sections ── */
+  .section { padding: 20px 24px; border-bottom: 1px solid #f0f0f0; }
+  .section-label {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1px; color: #bbb; margin-bottom: 12px;
+  }
+
+  input[type="password"] {
+    width: 100%; padding: 10px 14px; border: 1px solid #e5e5e5;
+    border-radius: 10px; font-size: 13px; font-family: inherit; outline: none;
+    transition: border-color 0.15s;
+  }
+  input:focus { border-color: #1a1a1a; }
+
+  .btn {
+    width: 100%; padding: 12px; border: none; border-radius: 10px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: all 0.15s; margin-top: 12px;
+  }
+  .btn-dark { background: #1a1a1a; color: #fff; }
+  .btn-dark:hover { background: #333; }
+  .btn-dark:disabled { background: #ccc; cursor: default; }
+  .btn-outline {
+    background: #fff; color: #1a1a1a; border: 1px solid #e5e5e5;
+  }
+  .btn-outline:hover { border-color: #1a1a1a; }
+  .btn-danger { background: none; color: #e5534b; border: none; font-size: 11px; margin-top: 16px; }
+
+  /* ── Progress ── */
+  .progress-container { text-align: center; padding: 32px 24px; }
+  .progress-bar-track {
+    height: 4px; background: #f0f0f0; border-radius: 4px;
+    overflow: hidden; margin: 16px 0;
+  }
+  .progress-bar-fill {
+    height: 100%; background: #1a1a1a; border-radius: 4px;
+    transition: width 0.3s ease; width: 0%;
+  }
+  .progress-label { font-size: 12px; color: #999; }
+  .progress-emoji { font-size: 32px; margin-bottom: 12px; }
+
+  /* ── Done state ── */
+  .done-container { text-align: center; padding: 32px 24px; }
+  .done-check { font-size: 40px; margin-bottom: 12px; }
+  .done-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .done-sub { font-size: 12px; color: #888; line-height: 1.5; }
+
+  .stat-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; font-size: 12px;
+  }
+  .stat-value { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  .help-text { font-size: 11px; color: #aaa; margin-top: 8px; line-height: 1.4; }
+
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .pulsing { animation: pulse 1.5s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<!-- STEP 1: Setup -->
+<div class="step active" id="step-setup">
+  <div class="header">
+    <h1>Discernment</h1>
+    <p>Learns how you write. Tells you when you're not being you.</p>
+  </div>
+  <div class="section">
+    <div class="section-label">Step 1 — Anthropic API Key</div>
+    <input type="password" id="apiKey" placeholder="sk-ant-..." />
+    <p class="help-text">Get one at console.anthropic.com. Stored locally, never shared.</p>
+    <button class="btn btn-dark" id="saveKeyBtn">Save Key</button>
+  </div>
+  <div class="section">
+    <div class="section-label">Step 2 — Connect Gmail</div>
+    <p class="help-text" style="margin-bottom: 12px;">
+      We'll read your sent emails to learn how you write. Read-only access — we never send anything.
+    </p>
+    <button class="btn btn-dark" id="connectBtn" disabled>Connect Gmail</button>
+  </div>
+</div>
+
+<!-- STEP 2: Learning -->
+<div class="step" id="step-learning">
+  <div class="header">
+    <h1>Discernment</h1>
+  </div>
+  <div class="progress-container">
+    <div class="progress-emoji pulsing" id="progressEmoji">&#128270;</div>
+    <div style="font-size: 14px; font-weight: 600;" id="progressTitle">Reading your emails...</div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">Starting...</div>
+  </div>
+</div>
+
+<!-- STEP 3: Report ready -->
+<div class="step" id="step-done">
+  <div class="header">
+    <h1>Discernment</h1>
+  </div>
+  <div class="done-container">
+    <div class="done-check">&#10003;</div>
+    <div class="done-title">Your taste report is ready</div>
+    <div class="done-sub">Click below to see who you are as a writer.</div>
+    <button class="btn btn-dark" id="viewReportBtn" style="margin-top: 20px;">View My Report</button>
+  </div>
+</div>
+
+<!-- STEP 4: Monitoring active -->
+<div class="step" id="step-monitoring">
+  <div class="header">
+    <h1>Discernment</h1>
+    <p>Monitoring your writing</p>
+  </div>
+  <div class="section">
+    <div class="stat-row">
+      <span>Emails analyzed</span>
+      <span class="stat-value" id="statEmails">0</span>
+    </div>
+    <div class="stat-row">
+      <span>Profile findings</span>
+      <span class="stat-value" id="statFindings">0</span>
+    </div>
+    <div class="stat-row">
+      <span>Status</span>
+      <span class="stat-value" style="color: #34d399;">Active</span>
+    </div>
+  </div>
+  <div class="section">
+    <button class="btn btn-outline" id="viewReportBtn2">View Report Again</button>
+    <button class="btn btn-danger" id="resetBtn">Reset Everything</button>
+  </div>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

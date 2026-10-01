@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discernment — Your Taste Report</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    background: #fafafa; color: #1a1a1a; line-height: 1.6;
+  }
+
+  .container { max-width: 660px; margin: 0 auto; padding: 60px 24px 140px; }
+
+  /* ── Hero ── */
+  .hero { text-align: center; margin-bottom: 48px; }
+  .hero h1 {
+    font-size: 48px; font-weight: 700; letter-spacing: -2px; margin-bottom: 8px;
+  }
+  .hero p { font-size: 15px; color: #888; }
+  .meta {
+    text-align: center; font-size: 12px; color: #bbb;
+    margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid #eee;
+  }
+
+  /* ── Timing ── */
+  .timing-section { margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid #eee; }
+  .section-title {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.5px; color: #bbb; margin-bottom: 20px;
+  }
+
+  .timing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .timing-card {
+    background: #fff; border-radius: 14px; padding: 20px;
+    border: 1px solid #f0f0f0;
+  }
+  .timing-card .label { font-size: 11px; color: #aaa; margin-bottom: 2px; }
+  .timing-card .value { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+  .timing-card .detail { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .chart-box {
+    background: #fff; border-radius: 14px; padding: 20px 20px 16px;
+    border: 1px solid #f0f0f0;
+  }
+  .chart-title { font-size: 12px; font-weight: 600; margin-bottom: 12px; color: #666; }
+  .hour-chart { display: flex; align-items: flex-end; gap: 2px; height: 60px; }
+  .hour-bar {
+    flex: 1; background: #e8e8e8; border-radius: 2px 2px 0 0;
+    min-height: 2px; transition: all 0.2s; cursor: default;
+  }
+  .hour-bar:hover { background: #666 !important; }
+  .hour-bar.peak { background: #1a1a1a; }
+  .hour-labels { display: flex; gap: 2px; margin-top: 6px; }
+  .hour-labels span {
+    flex: 1; text-align: center; font-size: 8px; color: #ccc;
+  }
+  .hour-labels span.show { color: #999; }
+
+  /* ── Findings ── */
+  .finding {
+    background: #fff; border-radius: 14px; padding: 28px;
+    border: 1px solid #f0f0f0; margin-bottom: 12px;
+    transition: border-color 0.15s;
+  }
+  .finding:hover { border-color: #e0e0e0; }
+
+  .finding-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .finding-category {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: #bbb;
+  }
+  .finding-text {
+    font-size: 17px; font-weight: 600; line-height: 1.4;
+    margin-bottom: 14px; letter-spacing: -0.2px;
+  }
+  .finding-evidence {
+    font-size: 13px; color: #777; padding: 14px 16px;
+    background: #f8f8f8; border-radius: 10px; margin-bottom: 12px;
+    font-style: italic; line-height: 1.6; border-left: 3px solid #e5e5e5;
+  }
+  .finding-insight { font-size: 13px; color: #555; line-height: 1.5; }
+
+  /* ── Reactions ── */
+  .reaction {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;
+    padding-top: 16px; border-top: 1px solid #f5f5f5;
+  }
+  .reaction button {
+    padding: 7px 18px; border-radius: 100px; border: 1px solid #e5e5e5;
+    background: #fff; font-size: 12px; font-weight: 500; cursor: pointer;
+    transition: all 0.15s; font-family: inherit;
+  }
+  .reaction button:hover { border-color: #999; }
+  .reaction button.yes {
+    background: #1a1a1a; color: #fff; border-color: #1a1a1a;
+  }
+  .reaction button.no {
+    background: #fff; color: #e5534b; border-color: #e5534b;
+  }
+  .reaction textarea {
+    display: none; width: 100%; margin-top: 4px; padding: 10px 14px;
+    border: 1px solid #e5e5e5; border-radius: 10px; font-size: 12px;
+    font-family: inherit; resize: none; height: 56px; outline: none;
+  }
+  .reaction textarea:focus { border-color: #1a1a1a; }
+  .reaction textarea.show { display: block; }
+
+  /* ── Submit ── */
+  .submit-section {
+    text-align: center; margin-top: 48px; padding-top: 48px;
+    border-top: 1px solid #eee;
+  }
+  .submit-section p { font-size: 14px; color: #aaa; margin-bottom: 20px; }
+  .btn-lock {
+    padding: 16px 48px; background: #1a1a1a; color: #fff; border: none;
+    border-radius: 100px; font-size: 15px; font-weight: 600; cursor: pointer;
+    font-family: inherit; letter-spacing: 0.2px; transition: all 0.15s;
+  }
+  .btn-lock:hover { background: #333; transform: translateY(-1px); }
+  .btn-lock:disabled { background: #ccc; transform: none; cursor: default; }
+  .saved-msg {
+    display: none; margin-top: 20px; font-size: 14px;
+    color: #34d399; font-weight: 600;
+  }
+
+  /* ── Loading ── */
+  .loading {
+    text-align: center; padding: 120px 24px;
+    font-size: 14px; color: #aaa;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .spinner {
+    width: 24px; height: 24px; border: 2px solid #eee;
+    border-top-color: #1a1a1a; border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="content">
+  <div class="loading">
+    <div class="spinner"></div>
+    Loading your report...
+  </div>
+</div>
+
+<script>
+const reactions = {};
+
+function formatHour(h) {
+  if (h === 0) return "12 AM";
+  if (h < 12) return h + " AM";
+  if (h === 12) return "12 PM";
+  return (h - 12) + " PM";
+}
+
+function formatHourShort(h) {
+  if (h === 0) return "12a";
+  if (h < 12) return h + "a";
+  if (h === 12) return "12p";
+  return (h - 12) + "p";
+}
+
+function escapeHtml(str) {
+  const el = document.createElement("span");
+  el.textContent = str;
+  return el.innerHTML;
+}
+
+async function loadReport() {
+  const data = await chrome.storage.local.get(["reportTiming", "reportProfile"]);
+  const timing = data.reportTiming;
+  const profile = data.reportProfile;
+
+  if (!timing || !profile) {
+    document.getElementById("content").innerHTML = `
+      <div class="loading">
+        <p>No report data found. Open the Discernment extension and connect your Gmail first.</p>
+      </div>`;
+    return;
+  }
+
+  const maxCount = Math.max(...timing.chartData.map(d => d.count), 1);
+  const now = new Date();
+
+  let html = `
+    <div class="hero">
+      <h1>Discernment</h1>
+      <p>We read ${timing.totalEmails} of your sent emails. Here's who you are.</p>
+    </div>
+    <div class="meta">
+      Report generated ${now.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+    </div>
+
+    <div class="timing-section">
+      <div class="section-title">Your Clock</div>
+      <div class="timing-grid">
+        <div class="timing-card">
+          <div class="label">You write best in the</div>
+          <div class="value">${escapeHtml(timing.amPmWinner)}</div>
+          <div class="detail">${timing.amPmDiffPct}% more substance vs. the other half</div>
+        </div>
+        <div class="timing-card">
+          <div class="label">Peak writing hour</div>
+          <div class="value">${escapeHtml(formatHour(timing.bestWritingHour))}</div>
+          <div class="detail">Your longest, most detailed emails</div>
+        </div>
+        <div class="timing-card">
+          <div class="label">Best day</div>
+          <div class="value">${escapeHtml(timing.bestDay)}</div>
+          <div class="detail">${timing.dailyAvgWords[timing.bestDay]} avg words</div>
+        </div>
+        <div class="timing-card">
+          <div class="label">Lazy hour</div>
+          <div class="value">${escapeHtml(formatHour(timing.worstWritingHour))}</div>
+          <div class="detail">Shortest, thinnest emails</div>
+        </div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">When you write</div>
+        <div class="hour-chart">
+          ${timing.chartData.map(d =>
+            `<div class="hour-bar${d.count === maxCount ? ' peak' : ''}"
+                  style="height: ${Math.max(3, (d.count / maxCount) * 100)}%"
+                  title="${formatHour(d.hour)}: ${d.count} emails, avg ${d.avgWords} words"></div>`
+          ).join("")}
+        </div>
+        <div class="hour-labels">
+          ${timing.chartData.map(d =>
+            `<span class="${d.hour % 6 === 0 ? 'show' : ''}">${d.hour % 6 === 0 ? formatHourShort(d.hour) : ''}</span>`
+          ).join("")}
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Your Taste Profile</div>`;
+
+  for (const f of profile.findings) {
+    html += `
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-category">${escapeHtml(f.category)}</span>
+      </div>
+      <div class="finding-text">${escapeHtml(f.finding)}</div>
+      <div class="finding-evidence">${escapeHtml(f.evidence)}</div>
+      <div class="finding-insight">${escapeHtml(f.insight)}</div>
+      <div class="reaction" data-id="${escapeHtml(f.id)}">
+        <button onclick="react('${escapeHtml(f.id)}', true, this)">That's me</button>
+        <button onclick="react('${escapeHtml(f.id)}', false, this)">Not quite</button>
+        <textarea id="note-${escapeHtml(f.id)}" placeholder="What's off about this? How would you describe it instead?"></textarea>
+      </div>
+    </div>`;
+  }
+
+  html += `
+    <div class="submit-section">
+      <p>React to the findings above, then lock in your profile to start monitoring.</p>
+      <button class="btn-lock" id="lockBtn" onclick="lockProfile()">Lock in my profile</button>
+      <div class="saved-msg" id="savedMsg">
+        Profile locked. Discernment is now watching.<br>
+        Go write something — open Gmail, Docs, Notion, or Slack.
+      </div>
+    </div>`;
+
+  document.getElementById("content").innerHTML = html;
+}
+
+function react(id, agreed, btn) {
+  reactions[id] = { agreed };
+  const container = btn.parentElement;
+  container.querySelectorAll("button").forEach(b => b.className = "");
+  btn.className = agreed ? "yes" : "no";
+  const ta = document.getElementById("note-" + id);
+  if (!agreed) {
+    ta.classList.add("show");
+    ta.focus();
+  } else {
+    ta.classList.remove("show");
+  }
+}
+
+async function lockProfile() {
+  const btn = document.getElementById("lockBtn");
+  btn.disabled = true;
+  btn.textContent = "Locking in...";
+
+  // Collect notes
+  const data = await chrome.storage.local.get(["reportProfile"]);
+  if (data.reportProfile?.findings) {
+    for (const f of data.reportProfile.findings) {
+      if (!reactions[f.id]) reactions[f.id] = { agreed: true };
+      const note = document.getElementById("note-" + f.id);
+      if (note?.value?.trim()) {
+        reactions[f.id].note = note.value.trim();
+      }
+    }
+  }
+
+  const result = await new Promise(resolve => {
+    chrome.runtime.sendMessage({ type: "SAVE_REACTIONS", reactions }, resolve);
+  });
+
+  if (result?.ok) {
+    btn.textContent = "Locked in";
+    btn.style.background = "#34d399";
+    document.getElementById("savedMsg").style.display = "block";
+  } else {
+    btn.textContent = "Error — try again";
+    btn.style.background = "#e5534b";
+    btn.disabled = false;
+  }
+}
+
+loadReport();
+</script>
+</body>
+</html>

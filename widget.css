@@ -1,0 +1,192 @@
+/* Discernment widget — floating taste feedback */
+
+#discernment-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2147483647;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #1a1a1a;
+}
+
+/* ── Pill (collapsed state) ── */
+
+.discernment-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #1a1a1a;
+  border-radius: 100px;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.discernment-pill:hover {
+  background: #2a2a2a;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.discernment-label {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ── Dot (status indicator) ── */
+
+.discernment-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #555;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+.discernment-dot.discernment-green {
+  background: #34d399;
+  box-shadow: 0 0 6px rgba(52, 211, 153, 0.5);
+}
+
+.discernment-dot.discernment-yellow {
+  background: #fbbf24;
+  box-shadow: 0 0 6px rgba(251, 191, 36, 0.5);
+}
+
+.discernment-dot.discernment-red {
+  background: #f87171;
+  box-shadow: 0 0 6px rgba(248, 113, 113, 0.5);
+}
+
+.discernment-dot.discernment-thinking {
+  background: #818cf8;
+  animation: discernment-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes discernment-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── Flash animation for notifications ── */
+
+.discernment-flash {
+  animation: discernment-flash-anim 0.3s ease;
+}
+
+@keyframes discernment-flash-anim {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* ── Panel (expanded state) ── */
+
+.discernment-panel {
+  display: none;
+  position: absolute;
+  bottom: 48px;
+  right: 0;
+  width: 360px;
+  max-height: 420px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.discernment-panel.discernment-open {
+  display: block;
+  animation: discernment-slide-up 0.2s ease;
+}
+
+@keyframes discernment-slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Panel header ── */
+
+.discernment-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  font-weight: 600;
+  font-size: 13px;
+  color: #1a1a1a;
+  letter-spacing: 0.2px;
+}
+
+.discernment-panel-header button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #999;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.discernment-panel-header button:hover {
+  color: #333;
+}
+
+/* ── Panel body ── */
+
+.discernment-panel-body {
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 340px;
+  color: #333;
+}
+
+/* ── Analysis formatting ── */
+
+.discernment-verdict {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.discernment-score {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.discernment-score span {
+  font-size: 14px;
+  font-weight: 400;
+  color: #999;
+}
+
+.discernment-details p {
+  margin: 0 0 10px 0;
+  padding-left: 12px;
+  border-left: 2px solid #e5e5e5;
+  font-size: 12.5px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.discernment-notification {
+  font-size: 13px;
+  color: #1a1a1a;
+  font-weight: 500;
+  text-align: center;
+  padding: 8px 0;
+}
