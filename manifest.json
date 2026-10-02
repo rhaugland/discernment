@@ -1,6 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Discernment",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApCNprIHqRDy5cOSBSj+ZxU+764lus/Xs638dcWmaOminJfwkUn/PkeWTaBmMsji4cgLtOinBNxJfQhV9VeGSby/IBW+qsrbvZbAHTjGcsLoaCfgGBwY4U/hnJDlxUJQOG7m7539Qq7HHdQ25WnvnA9c2v7FeyLzFrKfIjUmtU7Y73CwFfAqRGanV0uktZZazM57V58/XpZ2hERImuZTJ96zmyV5PZcT76URobDhY8AMrLsruozg/ffyDm97i2GpTrxxv22JQwS55zDFBEXDVkWmiGnGDoSCTS3xXgOrdDH5WAJcpuGvI92iBbQhs5pLv9zqDe4laMpD7TC2gsQ5tqQIDAQAB",
   "version": "0.2.0",
   "description": "Learns how you write. Tells you when you're not being you.",
   "permissions": ["identity", "storage", "activeTab", "contextMenus"],
@@ -11,7 +12,7 @@
     "https://docs.google.com/*"
   ],
   "oauth2": {
-    "client_id": "REPLACE_WITH_YOUR_CLIENT_ID.apps.googleusercontent.com",
+    "client_id": "357126823617-et7sj2fnqea3cjiigktljo3riom5uecu.apps.googleusercontent.com",
     "scopes": [
       "https://www.googleapis.com/auth/gmail.readonly"
     ]
