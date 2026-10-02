@@ -23,34 +23,54 @@
     min-height: 100vh;
     background: linear-gradient(
       180deg,
-      #9BAFBF 0%,
-      #B0BFC8 15%,
-      #C8CDD0 30%,
-      #D6D2CB 50%,
-      #E2D9CC 65%,
+      #8FA3B5 0%,
+      #A4B5C0 12%,
+      #BCC3C6 28%,
+      #D0CBC4 48%,
+      #DED7CC 65%,
       #E8E4DF 100%
     );
     overflow: hidden;
   }
 
-  /* The break — where sun pushes through */
+  /* The break — where sun pushes through (layered for intensity) */
   .sunbreak {
     position: absolute;
-    top: -60px;
+    top: -120px;
     left: 50%;
     transform: translateX(-50%);
-    width: 900px;
-    height: 700px;
+    width: 1100px;
+    height: 800px;
     background: radial-gradient(
-      ellipse at 50% 30%,
-      rgba(255, 236, 194, 0.85) 0%,
-      rgba(255, 223, 160, 0.5) 15%,
-      rgba(245, 205, 140, 0.25) 30%,
-      rgba(220, 195, 160, 0.08) 50%,
-      transparent 70%
+      ellipse at 50% 25%,
+      rgba(255, 250, 240, 1) 0%,
+      rgba(255, 238, 200, 0.9) 10%,
+      rgba(255, 220, 160, 0.65) 22%,
+      rgba(245, 200, 130, 0.35) 38%,
+      rgba(220, 190, 155, 0.12) 55%,
+      transparent 72%
     );
     pointer-events: none;
     animation: breathe 8s ease-in-out infinite;
+  }
+
+  /* Second glow layer — hot center */
+  .suncore {
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 350px;
+    background: radial-gradient(
+      ellipse at 50% 30%,
+      rgba(255, 255, 250, 1) 0%,
+      rgba(255, 245, 220, 0.8) 25%,
+      rgba(255, 230, 180, 0.3) 50%,
+      transparent 75%
+    );
+    pointer-events: none;
+    animation: breathe-core 8s ease-in-out infinite;
   }
 
   /* Light rays */
@@ -65,20 +85,20 @@
       conic-gradient(
         from 170deg at 50% 0%,
         transparent 0deg,
-        rgba(255, 230, 180, 0.06) 5deg,
-        transparent 10deg,
-        transparent 20deg,
-        rgba(255, 230, 180, 0.04) 25deg,
-        transparent 30deg,
-        transparent 45deg,
-        rgba(255, 230, 180, 0.07) 50deg,
-        transparent 55deg,
-        transparent 70deg,
-        rgba(255, 230, 180, 0.03) 75deg,
-        transparent 80deg,
-        transparent 160deg,
-        rgba(255, 230, 180, 0.05) 165deg,
-        transparent 170deg,
+        rgba(255, 240, 200, 0.14) 4deg,
+        transparent 9deg,
+        transparent 18deg,
+        rgba(255, 235, 190, 0.1) 22deg,
+        transparent 27deg,
+        transparent 42deg,
+        rgba(255, 240, 200, 0.16) 46deg,
+        transparent 51deg,
+        transparent 68deg,
+        rgba(255, 235, 190, 0.08) 72deg,
+        transparent 77deg,
+        transparent 155deg,
+        rgba(255, 240, 200, 0.12) 159deg,
+        transparent 164deg,
         transparent 180deg
       );
     pointer-events: none;
@@ -86,8 +106,13 @@
   }
 
   @keyframes breathe {
-    0%, 100% { opacity: 0.85; transform: translateX(-50%) scale(1); }
-    50% { opacity: 1; transform: translateX(-50%) scale(1.04); }
+    0%, 100% { opacity: 0.9; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.06); }
+  }
+
+  @keyframes breathe-core {
+    0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
   }
 
   @keyframes rotate-slow {
@@ -271,6 +296,7 @@
 
 <div class="sky">
   <div class="sunbreak"></div>
+  <div class="suncore"></div>
   <div class="rays"></div>
 
   <div class="container">
