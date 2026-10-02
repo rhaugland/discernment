@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discernment — Your Personal Taste Engine</title>
+<meta name="description" content="Discernment reads your writing, learns your voice, and tells you when you're not being you. A Chrome extension that holds you to your own standard.">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #fafafa;
+    --gray-1: #f5f5f5;
+    --gray-2: #e5e5e5;
+    --gray-3: #999;
+    --gray-4: #666;
+    --green: #34d399;
+    --yellow: #fbbf24;
+    --red: #f87171;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+    background: var(--white);
+    color: var(--black);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Nav ── */
+  nav {
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; }
+  .nav-link {
+    font-size: 13px; color: var(--gray-4); text-decoration: none;
+    padding: 8px 20px; border: 1px solid var(--gray-2); border-radius: 100px;
+    transition: all 0.15s;
+  }
+  .nav-link:hover { border-color: var(--black); color: var(--black); }
+
+  /* ── Hero ── */
+  .hero {
+    text-align: center;
+    padding: 100px 0 80px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .hero h1 {
+    font-size: 64px;
+    font-weight: 700;
+    letter-spacing: -3px;
+    line-height: 1.05;
+    margin-bottom: 24px;
+  }
+  .hero p {
+    font-size: 19px;
+    color: var(--gray-4);
+    line-height: 1.6;
+    max-width: 520px;
+    margin: 0 auto 40px;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 36px;
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+  .hero-sub {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--gray-3);
+  }
+
+  /* ── Demo section ── */
+  .demo {
+    padding: 60px 0;
+    border-top: 1px solid var(--gray-2);
+  }
+  .demo-label {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--gray-3);
+    margin-bottom: 40px;
+  }
+
+  .demo-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--gray-2);
+    overflow: hidden;
+    max-width: 640px;
+    margin: 0 auto;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+  }
+  .demo-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gray-1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .demo-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .demo-header span {
+    font-size: 12px; font-weight: 600; color: var(--gray-3);
+    letter-spacing: 0.3px;
+  }
+  .demo-body { padding: 24px; }
+  .demo-verdict {
+    font-size: 16px; font-weight: 600; margin-bottom: 12px;
+  }
+  .demo-score {
+    font-size: 48px; font-weight: 700; letter-spacing: -1px; margin-bottom: 16px;
+  }
+  .demo-score sub { font-size: 16px; color: var(--gray-3); font-weight: 400; }
+  .demo-detail {
+    padding: 8px 0 8px 14px;
+    border-left: 2px solid var(--gray-2);
+    font-size: 13px;
+    color: var(--gray-4);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  /* ── How it works ── */
+  .how {
+    padding: 80px 0;
+    border-top: 1px solid var(--gray-2);
+  }
+  .how h2 {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    margin-bottom: 60px;
+  }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+  .step-card { text-align: center; }
+  .step-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--black); color: var(--white);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; margin-bottom: 16px;
+  }
+  .step-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .step-card p { font-size: 13px; color: var(--gray-4); line-height: 1.5; }
+
+  /* ── Features ── */
+  .features {
+    padding: 80px 0;
+    border-top: 1px solid var(--gray-2);
+  }
+  .features h2 {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    margin-bottom: 60px;
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .feature-card {
+    background: #fff;
+    border: 1px solid var(--gray-2);
+    border-radius: 14px;
+    padding: 28px;
+  }
+  .feature-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .feature-card p { font-size: 13px; color: var(--gray-4); line-height: 1.5; }
+
+  /* ── The line ── */
+  .the-line {
+    padding: 100px 0;
+    text-align: center;
+    border-top: 1px solid var(--gray-2);
+  }
+  .the-line blockquote {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.8px;
+    line-height: 1.4;
+    max-width: 560px;
+    margin: 0 auto 16px;
+  }
+  .the-line cite {
+    font-style: normal;
+    font-size: 13px;
+    color: var(--gray-3);
+  }
+
+  /* ── Footer ── */
+  footer {
+    padding: 40px 0;
+    border-top: 1px solid var(--gray-2);
+    text-align: center;
+    font-size: 12px;
+    color: var(--gray-3);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 40px; letter-spacing: -2px; }
+    .hero p { font-size: 16px; }
+    .steps-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .how h2, .features h2 { font-size: 28px; }
+    .the-line blockquote { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <nav>
+    <div class="logo">Discernment</div>
+    <a href="https://github.com/rhaugland/discernment" class="nav-link" target="_blank">GitHub</a>
+  </nav>
+</div>
+
+<div class="container">
+  <div class="hero">
+    <h1>Grammarly tells you what's wrong.<br>We tell you what's not you.</h1>
+    <p>Discernment reads your sent emails, learns your voice, your timing, your taste — then holds you to your own standard as you write.</p>
+    <a href="https://github.com/rhaugland/discernment" class="hero-cta">
+      Get the Chrome Extension
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <div class="hero-sub">Free. Local-first. Your data never leaves your machine.</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="demo">
+    <div class="demo-label">What you see while writing</div>
+    <div class="demo-card">
+      <div class="demo-header">
+        <div class="demo-dot" style="background: var(--yellow);"></div>
+        <span>Discernment</span>
+      </div>
+      <div class="demo-body">
+        <div class="demo-verdict">This reads like a first draft, not like you.</div>
+        <div class="demo-score">5<sub>/10</sub></div>
+        <div class="demo-detail">Your opener is generic — you usually lead with a specific reference to the recipient's last message. This one starts with "Hope you're doing well."</div>
+        <div class="demo-detail">Specificity dropped. Your client emails average 3 concrete numbers or dates. This one has zero.</div>
+        <div class="demo-detail">The closing is authentically you — direct ask with a clear next step. That's your signature move.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="how">
+    <h2>How it works</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Install</h3>
+        <p>Add the Chrome extension. Enter your API key. Connect Gmail with one click.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Learn</h3>
+        <p>Discernment reads your last 200 sent emails. Analyzes your voice, timing, patterns, and drift zones.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Report</h3>
+        <p>You get a taste report: here's who you are as a writer. React to each finding — "that's me" or "not quite."</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <h3>Monitor</h3>
+        <p>Discernment watches as you write in Gmail, Docs, Notion, and Slack. Subtle feedback when you drift.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="features">
+    <h2>What it sees</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>Your Clock</h3>
+        <p>When you write best. Your peak hour, your lazy hour, your best day. "You write 40% more substance before noon."</p>
+      </div>
+      <div class="feature-card">
+        <h3>Your Voice</h3>
+        <p>How you sound. Cadence, rhythm, the phrases you lean on. The difference between you and everyone else.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Your Drift Zone</h3>
+        <p>Where your writing gets lazy. The contexts where you go generic. The honest part nobody else will tell you.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Your Signature Move</h3>
+        <p>The one thing that makes your writing yours. The pattern a mimic would need to nail.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Continuous Learning</h3>
+        <p>Every email you send teaches Discernment more. Your taste profile evolves as you do.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Private by Design</h3>
+        <p>Your writing samples stay in Chrome's local storage. Nothing is stored on our servers. Ever.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="the-line">
+    <blockquote>"We already have a tool that tells you if your writing is correct. This is the tool that tells you if your writing is yours."</blockquote>
+    <cite>The pitch</cite>
+  </div>
+</div>
+
+<div class="container">
+  <footer>
+    Discernment &middot; Built by <a href="https://github.com/rhaugland" style="color: inherit;">rhaugland</a>
+  </footer>
+</div>
+
+</body>
+</html>
