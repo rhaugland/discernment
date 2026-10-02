@@ -3,134 +3,172 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Glimmer — Your Personal Taste Engine</title>
+<title>Glimmer</title>
 <meta name="description" content="AI that learns your voice and catches when your energy isn't matching your taste.">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  :root {
-    --cream: #FFFBF5;
-    --warm-white: #FFF7ED;
-    --gold: #D4944C;
-    --gold-light: #F0C888;
-    --gold-glow: #FCECD2;
-    --amber: #C17F3A;
-    --text: #3D3024;
-    --text-soft: #8C7B6B;
-    --text-muted: #B5A594;
-    --border: #EDE4D8;
-    --card: #FFFDF9;
-    --green: #7EBD6E;
-    --yellow: #E8B84C;
-    --red: #D4735E;
-  }
-
   body {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-    background: var(--cream);
-    color: var(--text);
+    background: #E8E4DF;
+    color: #2C2825;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
-  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+  /* ── The sky ── */
+  .sky {
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(
+      180deg,
+      #9BAFBF 0%,
+      #B0BFC8 15%,
+      #C8CDD0 30%,
+      #D6D2CB 50%,
+      #E2D9CC 65%,
+      #E8E4DF 100%
+    );
+    overflow: hidden;
+  }
+
+  /* The break — where sun pushes through */
+  .sunbreak {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 700px;
+    background: radial-gradient(
+      ellipse at 50% 30%,
+      rgba(255, 236, 194, 0.85) 0%,
+      rgba(255, 223, 160, 0.5) 15%,
+      rgba(245, 205, 140, 0.25) 30%,
+      rgba(220, 195, 160, 0.08) 50%,
+      transparent 70%
+    );
+    pointer-events: none;
+    animation: breathe 8s ease-in-out infinite;
+  }
+
+  /* Light rays */
+  .rays {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background:
+      conic-gradient(
+        from 170deg at 50% 0%,
+        transparent 0deg,
+        rgba(255, 230, 180, 0.06) 5deg,
+        transparent 10deg,
+        transparent 20deg,
+        rgba(255, 230, 180, 0.04) 25deg,
+        transparent 30deg,
+        transparent 45deg,
+        rgba(255, 230, 180, 0.07) 50deg,
+        transparent 55deg,
+        transparent 70deg,
+        rgba(255, 230, 180, 0.03) 75deg,
+        transparent 80deg,
+        transparent 160deg,
+        rgba(255, 230, 180, 0.05) 165deg,
+        transparent 170deg,
+        transparent 180deg
+      );
+    pointer-events: none;
+    animation: rotate-slow 120s linear infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% { opacity: 0.85; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.04); }
+  }
+
+  @keyframes rotate-slow {
+    from { transform: translateX(-50%) rotate(0deg); }
+    to { transform: translateX(-50%) rotate(360deg); }
+  }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
 
   /* ── Nav ── */
   nav {
-    padding: 20px 0;
+    padding: 24px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   .logo {
     font-size: 15px; font-weight: 700; letter-spacing: -0.3px;
-    color: var(--gold);
+    color: rgba(44, 40, 37, 0.6);
   }
   .nav-link {
-    font-size: 13px; color: var(--text-soft); text-decoration: none;
-    padding: 8px 20px; border: 1px solid var(--border); border-radius: 100px;
-    transition: all 0.15s;
+    font-size: 13px; color: rgba(44, 40, 37, 0.5); text-decoration: none;
+    padding: 8px 20px; border: 1px solid rgba(44, 40, 37, 0.12); border-radius: 100px;
+    transition: all 0.2s;
+    backdrop-filter: blur(4px);
   }
-  .nav-link:hover { border-color: var(--gold); color: var(--text); }
+  .nav-link:hover { border-color: rgba(44, 40, 37, 0.3); color: rgba(44, 40, 37, 0.8); }
 
   /* ── Hero ── */
   .hero {
     text-align: center;
-    padding: 80px 0 60px;
+    padding: 120px 0 100px;
     max-width: 700px;
     margin: 0 auto;
-    position: relative;
   }
-
-  /* Sun glow behind heading */
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 480px;
-    height: 480px;
-    background: radial-gradient(circle, rgba(240, 200, 136, 0.3) 0%, rgba(240, 200, 136, 0.08) 40%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 0;
-  }
-
   .hero h1 {
     font-size: 64px;
     font-weight: 700;
     letter-spacing: -3px;
     line-height: 1.05;
     margin-bottom: 24px;
-    position: relative;
-    z-index: 1;
-    color: var(--text);
+    color: #2C2825;
   }
   .hero p {
     font-size: 19px;
-    color: var(--text-soft);
+    color: rgba(44, 40, 37, 0.55);
     line-height: 1.6;
-    max-width: 520px;
-    margin: 0 auto 40px;
-    position: relative;
-    z-index: 1;
+    max-width: 440px;
+    margin: 0 auto 44px;
   }
   .hero-cta {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 16px 36px;
-    background: var(--gold);
-    color: #fff;
+    background: rgba(44, 40, 37, 0.85);
+    color: #F5EDE2;
     border: none;
     border-radius: 100px;
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
-    transition: all 0.2s;
+    transition: all 0.25s;
     cursor: pointer;
     font-family: inherit;
-    position: relative;
-    z-index: 1;
+    backdrop-filter: blur(4px);
   }
   .hero-cta:hover {
-    background: var(--amber);
+    background: rgba(44, 40, 37, 0.95);
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(212, 148, 76, 0.25);
+    box-shadow: 0 12px 40px rgba(44, 40, 37, 0.15);
   }
   .hero-sub {
     margin-top: 16px;
     font-size: 13px;
-    color: var(--text-muted);
-    position: relative;
-    z-index: 1;
+    color: rgba(44, 40, 37, 0.35);
   }
 
-  /* ── Demo section ── */
-  .demo {
-    padding: 60px 0;
-    border-top: 1px solid var(--border);
+  /* ── Demo ── */
+  .demo-section {
+    padding: 0 0 80px;
   }
   .demo-label {
     text-align: center;
@@ -138,144 +176,154 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: var(--text-muted);
-    margin-bottom: 40px;
+    color: rgba(44, 40, 37, 0.3);
+    margin-bottom: 32px;
   }
-
   .demo-card {
-    background: var(--card);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
     border-radius: 16px;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     overflow: hidden;
-    max-width: 640px;
+    max-width: 580px;
     margin: 0 auto;
-    box-shadow: 0 2px 20px rgba(180, 150, 100, 0.06);
+    box-shadow: 0 4px 30px rgba(44, 40, 37, 0.06);
   }
   .demo-header {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--gold-glow);
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(44, 40, 37, 0.06);
     display: flex;
     align-items: center;
     gap: 8px;
-    background: linear-gradient(135deg, var(--gold-glow) 0%, var(--card) 100%);
   }
   .demo-dot {
     width: 8px; height: 8px; border-radius: 50%;
+    background: #DBA64A;
+    box-shadow: 0 0 8px rgba(219, 166, 74, 0.4);
   }
   .demo-header span {
-    font-size: 12px; font-weight: 600; color: var(--gold);
+    font-size: 12px; font-weight: 600;
+    color: rgba(44, 40, 37, 0.4);
     letter-spacing: 0.3px;
   }
   .demo-body { padding: 24px; }
   .demo-verdict {
-    font-size: 16px; font-weight: 600; margin-bottom: 12px;
-    color: var(--text);
+    font-size: 15px; font-weight: 600; margin-bottom: 12px;
   }
   .demo-score {
-    font-size: 48px; font-weight: 700; letter-spacing: -1px; margin-bottom: 16px;
-    color: var(--text);
+    font-size: 44px; font-weight: 700; letter-spacing: -1px; margin-bottom: 16px;
   }
-  .demo-score sub { font-size: 16px; color: var(--text-muted); font-weight: 400; }
+  .demo-score sub { font-size: 15px; color: rgba(44, 40, 37, 0.3); font-weight: 400; }
   .demo-detail {
     padding: 8px 0 8px 14px;
-    border-left: 2px solid var(--gold-glow);
+    border-left: 2px solid rgba(219, 166, 74, 0.25);
     font-size: 13px;
-    color: var(--text-soft);
+    color: rgba(44, 40, 37, 0.55);
     margin-bottom: 10px;
     line-height: 1.5;
   }
 
-  /* ── The line ── */
+  /* ── Bottom ── */
+  .bottom {
+    background: #E8E4DF;
+    position: relative;
+  }
+
   .the-line {
-    padding: 100px 0;
+    padding: 80px 0;
     text-align: center;
-    border-top: 1px solid var(--border);
   }
   .the-line blockquote {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 600;
     letter-spacing: -0.8px;
     line-height: 1.4;
-    max-width: 560px;
-    margin: 0 auto 16px;
-    color: var(--text);
+    max-width: 500px;
+    margin: 0 auto 14px;
+    color: rgba(44, 40, 37, 0.7);
   }
   .the-line cite {
     font-style: normal;
     font-size: 13px;
-    color: var(--text-muted);
+    color: rgba(44, 40, 37, 0.3);
   }
 
-  /* ── Footer ── */
   footer {
-    padding: 40px 0;
-    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    border-top: 1px solid rgba(44, 40, 37, 0.08);
     text-align: center;
     font-size: 12px;
-    color: var(--text-muted);
+    color: rgba(44, 40, 37, 0.3);
   }
-  footer a { color: var(--text-muted); }
+  footer a { color: inherit; }
 
-  /* ── Responsive ── */
   @media (max-width: 768px) {
-    .hero h1 { font-size: 40px; letter-spacing: -2px; }
+    .hero { padding: 80px 0 60px; }
+    .hero h1 { font-size: 38px; letter-spacing: -1.5px; }
     .hero p { font-size: 16px; }
-    .hero::before { width: 300px; height: 300px; }
-    .the-line blockquote { font-size: 22px; }
+    .sunbreak { width: 500px; height: 400px; }
+    .rays { width: 400px; height: 400px; }
+    .the-line blockquote { font-size: 21px; }
   }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <nav>
-    <div class="logo">Glimmer</div>
-    <a href="https://github.com/rhaugland/discernment" class="nav-link" target="_blank">GitHub</a>
-  </nav>
-</div>
+<div class="sky">
+  <div class="sunbreak"></div>
+  <div class="rays"></div>
 
-<div class="container">
-  <div class="hero">
-    <h1>Your taste doesn't change.<br>Your energy does.</h1>
-    <p>AI that catches when one starts dragging down the other.</p>
-    <a href="https://github.com/rhaugland/discernment" class="hero-cta">
-      Get early access
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
-    <div class="hero-sub">Free. Private. Your data never leaves your machine.</div>
+  <div class="container">
+    <nav>
+      <div class="logo">Glimmer</div>
+      <a href="https://github.com/rhaugland/discernment" class="nav-link" target="_blank">GitHub</a>
+    </nav>
   </div>
-</div>
 
-<div class="container">
-  <div class="demo">
-    <div class="demo-label">Live feedback</div>
-    <div class="demo-card">
-      <div class="demo-header">
-        <div class="demo-dot" style="background: var(--yellow);"></div>
-        <span>Glimmer</span>
-      </div>
-      <div class="demo-body">
-        <div class="demo-verdict">This reads like a first draft, not like you.</div>
-        <div class="demo-score">5<sub>/10</sub></div>
-        <div class="demo-detail">You usually open with a direct reference. This one starts with "Hope you're doing well."</div>
-        <div class="demo-detail">Your client emails average 3 concrete numbers. This has zero.</div>
-        <div class="demo-detail">The close is you — direct ask, clear next step.</div>
+  <div class="container">
+    <div class="hero">
+      <h1>Your taste doesn't change.<br>Your energy does.</h1>
+      <p>AI that catches when one starts dragging down the other.</p>
+      <a href="https://github.com/rhaugland/discernment" class="hero-cta">
+        Get early access
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <div class="hero-sub">Free. Private. Your data never leaves your machine.</div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="demo-section">
+      <div class="demo-label">Live feedback</div>
+      <div class="demo-card">
+        <div class="demo-header">
+          <div class="demo-dot"></div>
+          <span>Glimmer</span>
+        </div>
+        <div class="demo-body">
+          <div class="demo-verdict">This reads like a first draft, not like you.</div>
+          <div class="demo-score">5<sub>/10</sub></div>
+          <div class="demo-detail">You usually open with a direct reference. This one starts with "Hope you're doing well."</div>
+          <div class="demo-detail">Your client emails average 3 concrete numbers. This has zero.</div>
+          <div class="demo-detail">The close is you — direct ask, clear next step.</div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="container">
-  <div class="the-line">
-    <blockquote>"Everyone has taste. No one has a mirror for it."</blockquote>
-    <cite>Until now.</cite>
+<div class="bottom">
+  <div class="container">
+    <div class="the-line">
+      <blockquote>"Everyone has taste. No one has a mirror for it."</blockquote>
+      <cite>Until now.</cite>
+    </div>
   </div>
-</div>
-
-<div class="container">
-  <footer>
-    Glimmer &middot; Built by <a href="https://github.com/rhaugland">rhaugland</a>
-  </footer>
+  <div class="container">
+    <footer>
+      Glimmer &middot; Built by <a href="https://github.com/rhaugland">rhaugland</a>
+    </footer>
+  </div>
 </div>
 
 </body>
